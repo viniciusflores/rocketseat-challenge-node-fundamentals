@@ -56,8 +56,25 @@ export const routes = [
     method: 'PUT',
     path: buildRoutePath('/tasks/:id'),
     handler: (req, res) => {
-      console.log('put')
-      return res.writeHead(204).end()
+      const {id} = req.params
+      const task = database.select('tasks', {id})
+
+      if(task.length === 0){
+        return res.writeHead(404).end('User not found')
+      }
+
+      const { title, description } = req.body
+
+      const updatedTask = {
+        ...task[0],
+        title: title ?? task[0].title,
+        description: description ?? task[0].description,
+        updated_at: Date.now()
+      }
+
+      database.update('tasks', id, updatedTask)
+
+      res.end(JSON.stringify(updatedTask));
     }
   },
   {

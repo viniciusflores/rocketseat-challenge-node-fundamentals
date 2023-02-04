@@ -28,14 +28,22 @@ export const routes = [
     method: 'GET',
     path: buildRoutePath('/tasks'),
     handler: (req, res) => {
-      const {search} = req.query
+      const { title, description } = req.query
 
       let tasks
 
-      if(search){
+      if(title && description){
         tasks = database.select('tasks', {
-          title: search,
-          description: search
+          title,
+          description
+        })
+      } else if(title) {
+          tasks = database.select('tasks', {
+            title,
+        })
+      } else if(description) {
+          tasks = database.select('tasks', {
+            description,
         })
       } else {
         tasks = database.select('tasks')

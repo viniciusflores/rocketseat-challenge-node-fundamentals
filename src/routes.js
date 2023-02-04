@@ -10,6 +10,11 @@ export const routes = [
     path: buildRoutePath('/tasks'),
     handler: (req, res) => {
       const { title, description } = req.body
+
+      if(!title || !description){
+        return res.writeHead(404).end('Required data is not filled')
+      }
+
       const task = {
         id: randomUUID(),
         title,
@@ -64,6 +69,10 @@ export const routes = [
       }
 
       const { title, description } = req.body
+
+      if(!title && !description){
+        return res.writeHead(404).end('Required data is not filled')
+      }
 
       const updatedTask = {
         ...task[0],
